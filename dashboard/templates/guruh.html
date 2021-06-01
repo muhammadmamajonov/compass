@@ -1,0 +1,67 @@
+{% extends 'manba.html' %} {% load static %} {% block css %}
+<link href="{% static 'yangi/vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet"> {% endblock css %} {% block content %}
+
+<div class="container-fluid">
+    <div id="card" class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary"><b><i>{{guruh.nomi }}</i></b> guruh o'quvchilari </h6>
+            <h6 class="m-0 font-weight-bold text-primary" style="text-align: right;"> Bir oylik narxi {{guruh.narxi}} so'm</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            {% comment %} <th>T</th> {% endcomment %}
+                            <th>Ism-Familya</th>
+                            <!-- <th>Fan</th> -->
+                            <th>Manzil</th>
+                            <th>Telefon</th>
+                            <th>Filial</th>
+                            <th>Sharoit</th>
+                            <th>To'lagan</th>
+                            <!--<th>Yig'ildi</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for chala in chalalar %}
+                        <tr>
+                            {% comment %} <td>{{ forloop.counter }}</td> {% endcomment %}
+                            <td>{{ chala.talaba_ism.ism_familya }}</td>
+                            <!--<td style="color: rgb(63, 42, 42);"><span id="fan-rang" style="background-color: {{guruh.fan_rang}}; ">{{ chala.guruh.nomi }}</span><br></td>-->
+                            <td>{{chala.talaba_ism.manzil}}</td>
+                            <td>{{ chala.talaba_ism.telefon }}</td>
+                            <td class="text-center">{{ chala.talaba_ism.filyal.nomi }}</td>
+                            <td style="text-align: center;">{% if chala.talaba_ism.sharoit %}{{chala.talaba_ism.sharoit}}{% endif %} </td>
+                            <td>{{chala.summa}} so'm</td>
+                            <!--<td>{{talaba.yigildi}} so'm</td> -->
+                        </tr>
+                        {% endfor %}
+                         
+                        
+                        {% for tolamagan in tolamaganlar %}
+                        <tr>
+                            {% comment %} <td>{{ forloop.counter }}</td> {% endcomment %}
+                            <td>{{ tolamagan.talaba.ism_familya }}</td>
+                            <!--<td style="color: rgb(63, 42, 42);"><span id="fan-rang" style="background-color: {{guruh.fan_rang}}; ">{{ chala.guruh.nomi }}</span><br></td>-->
+                            <td>{{tolamagan.talaba.manzil}}</td>
+                            <td>{{ tolamagan.talaba.telefon }}</td>
+                            <td class="text-center">{{ tolamagan.talaba.filyal.nomi }}</td>
+                            <td style="text-align: center;">{% if tolamagan.talaba.sharoit %}{{tolamagan.talaba.sharoit}}{% endif %} </td>
+                            <td>0 so'm</td>
+                            <!--<td>{{talaba.yigildi}} so'm</td> -->
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %} {% block js %}
+<!-- Page level plugins -->
+<script src="{% static 'yangi/vendor/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'yangi/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+<!-- Page level custom scripts -->
+<script src="{% static 'yangi/js/demo/datatables-demo.js' %}"></script>
+{% endblock js %}

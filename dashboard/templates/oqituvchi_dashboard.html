@@ -1,0 +1,168 @@
+{% extends 'manba_oqituvchi.html' %} {% load static %} {% block content %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+    <div class="row text-center">
+        <div class="col-xl-4 col-md-6 mb-4 text-center">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div style="font-size: 16px;" class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Jami O'quvchilar</div>
+                            <div style="font-size: 20px;" class="h5 mb-0 font-weight-bold text-gray-800">{{ oquvchilar }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-md-6 mb-4 text-center">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div style="font-size: 16px;" class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Jami summa</div>
+                            <div style="font-size: 20px;" class="h5 mb-0 font-weight-bold text-gray-800">{{ pul }} sum</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-md-6 mb-4 text-center">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div style="font-size: 16px;" class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Tolov qilmaganlar soni</div>
+                            <div style="font-size: 20px;" class="h5 mb-0 font-weight-bold text-gray-800">{{ tolamaganlar_soni }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- DataTables Example -->
+    <div id="card" class="card shadow mb-4">
+        <div class="card-header py-3">
+            <div class="dropdown">
+                <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Guruhlar</button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    {% for guruh in guruhlari %}
+                    <a class="dropdown-item" onclick="guruhtalaba({{ guruh.id }})">{{ guruh.nomi }}</a> {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <div class="row">
+                    <div>
+
+                    </div>
+                </div>
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Ism-Familiya</th>
+                            <th>Telefon</th>
+                            <th>Manzil</th>
+                            <th>To'lov</th>
+                        </tr>
+                    </thead>
+                    <tbody id="gr_talabalar">
+                        {% for talaba in talabalar %}
+                        <tr>
+                            <td>{{ talaba.talaba.ism_familya }}</td>
+                            <td>{{ talaba.talaba.telefon }}</td>
+                            <td>{{ talaba.talaba.manzil }}</td>
+                            {% if talaba.talaba.id in tolaganlar_id %}
+                            <td style="color: green;">Qilingan</td>
+                            {% else %}
+                            <td style="color: red;">Qilinmagan</td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
+
+<script>
+    var i
+
+    function guruhtalaba(id) {
+        i = id
+        $.ajax({
+            type: 'GET',
+            url: "/dashboard/guruh-talabalari/",
+            data: {
+                i: i
+            },
+            success: function(data) {
+                var datas = data['data'];
+                var gt = '';
+                for (var dt of datas) {
+                    ism = dt.ism;
+                    id = dt.id;
+                    guruh = dt.guruh;
+                    tel = dt.tel;
+                    tolov = dt.tolov;
+                    manzil = dt.manzil
+
+                    if (tolov == 1) {
+                        console.log("tolov:", tolov);
+                        gt +=
+                            `<tr>
+                                <td><button style="background-color: white; border: none; outline: none;" data-toggle="modal" data-target="#exampleModal` + id + `">` + ism + `</button></td>
+                                <td>` + tel + `</td>
+                                <td>` + manzil + `</td>
+                                <td style="color: green"> To'lov qilingan </td>
+                            </tr>`
+                    } else {
+                        console.log("to'lanmagan");
+                        gt +=
+                            `<tr>
+                                <td><button style="background-color: white; border: none; outline: none;" data-toggle="modal" data-target="#exampleModal` + id + `">` + ism + `</button></td>
+                                <td>` + tel + `</td>
+                                <td>` + manzil + `</td>
+                                <td style="color: red"> To'lov qilinmagan </td>
+                            </tr>`
+
+                    }
+
+
+                }
+
+                document.getElementById("gr_talabalar").innerHTML = gt;
+
+
+            }
+
+        })
+    }
+</script>
+
+{% endblock content %} {% block js %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="{% static 'yangi/js/guruh_talabalari.js' %}"></script>
+{% endblock js %}

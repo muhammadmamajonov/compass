@@ -1,0 +1,232 @@
+{% extends 'manba.html' %} {% load static %} {% block css %}
+<!-- Custom styles for this page -->
+<link href="{% static 'yangi/vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/css/select2.min.css'>
+<link rel="stylesheet" href="{% static 'multiple-select/style.css' %}"> {% endblock css %} {% block guruhlar %}
+
+<li>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#royxatga-olishModal"><img style="width: 20px; height: 20px;" src="{% static 'yangi/img/plus.png' %}"> Qo'shish</button>
+</li>
+{% endblock guruhlar %}
+{% block content %} {% for murojat in murojatlar %}
+
+<div class="modal fade" id="malumotQoshModal{{murojat.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel" style="color: black">Ma'lumot qo'shish</h4>
+                <button type="button" style="outline: none;" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form method="post" action="{% url 'leads' %}">
+                {% csrf_token %}
+                <div class="modal-body py-5">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12 py-2 text-center">
+                                <textarea name="malumot" style="width: 300px; border-radius: 10px; padding: 8px; border: 1px solid black; outline: none;" type="text" placeholder="Malumot" required></textarea>
+                            </div>
+                            <input type="hidden" name="murojat_id" value="{{murojat.id}}" </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <button type="submit" class="btn btn-primary">Saqlash</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+  <!-- Modal -->
+    <div class="modal fade" id="royxatga-olishModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="exampleModalLabel" style="color: black">Leadga qo'shish</h4>
+                    <button type="button" style="outline: none;" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                </div>
+
+                <form method="post" action="{% url 'leads' %}">
+                    {% csrf_token %}
+                    <div class="modal-body py-5">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-12 py-2 text-center">
+                                    <input name="ism" style="width: 300px; border-radius: 10px; padding: 8px; border: 1px solid black; outline: none;" type="text" placeholder="Ism-Familya" required>
+                                </div>
+                                <div class="col-12 py-2 text-center">
+                                    <input name="manzil" style="width: 300px; border-radius: 10px; padding: 8px; border: 1px solid black; outline: none;" type="text" placeholder="Manzil" required>
+                                </div>
+                                <div class="col-12 py-2 text-center">
+                                    <input name="telefon" style="width: 300px; border-radius: 10px; padding: 8px; border: 1px solid black; outline: none;" type="text" placeholder="Telefon" required>
+                                </div>
+                                <div class="col-12 py-2 text-center">
+
+                                    <textarea name="malumot" style="width: 300px; border-radius: 10px; padding: 8px; border: 1px solid black; outline: none;" type="text" placeholder="Malumot" required></textarea>
+                                </div>
+                                <div class="col-12 py-2 text-center">
+                                    <select name="fan" id="fan" style="width: 300px; border-radius: 10px; padding: 8px; border: 1px solid black; outline: none;" type="text" placeholder="Fan nomi" class="js-example-placeholder-multiple" multiple="multiple" required>
+                                    
+                                    {% for fan in fanlar %}
+                                    <option value="{{ fan.id }}">{{ fan.darsnomi }}</option>
+                                    {% endfor %}
+                                </select>
+                                </div>
+                                <div class="col-12 py-2 text-center">
+                                    <input name="qayerdan_keldi" style="width: 300px; border-radius: 10px; padding: 8px; border: 1px solid black; outline: none;" type="text" placeholder="Qayerdan eshitdi" required>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <button type="submit" class="btn btn-primary">Qo'shish</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+   <!-- Begin Page Content -->
+    <div class="container-fluid">
+        <!-- DataTales Example -->
+        <div id="card" class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Leadslar</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Ism-Familya</th>
+                                <th>Telefon</th>
+                                <th>Manzil</th>
+                                <th>Fan</th>
+                                <th>Ma'lumot</th>
+                                <th>Sana</th>
+                                <th>Kutayotganlarga qo'shish</th>
+                                <th>Ma'lumot qoldirish</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for murojat in murojatlar %}{{murojatlar}}
+                            <tr>
+                                <td>{{ murojat.ism }}</td>
+                                <td>{{ murojat.telefon }}</td>
+                                <td>{{ murojat.manzil }}</td>
+                                <td style="color: white;">{% for fan in murojat.dars.all %}<span id="fan-rang" style="background-color: {{fan.rang}}; ">{{ fan.darsnomi }}</span><br>{% endfor %}</td>
+                                <td> {{ murojat.toliq }}</td>
+                                <td>{{ murojat.sana }}</td>
+                                <td class="text-center"><i type="button" data-toggle="modal" data-target="#exampleModal{{ murojat.id }}" class="fas fa-plus-circle"></i>
+                                </td>
+                                <td><button class="btn btn-link" data-toggle="modal" data-target="#malumotQoshModal{{ murojat.id }}"><img style="width: 20px" src = "{% static 'yangi/img/edit.svg' %}"></button></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Modal -->
+            {% for murojat in murojatlar %}
+            <div class="modal fade" id="exampleModal{{ murojat.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel{{ murojat.id }}" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Kutayotganlarga qo'shish</h5>
+                            <button type="button" style="outline: none;" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                        </div>
+                        <form action="{% url 'admin-murojatlar' %}" method="post">
+                            {% csrf_token %}
+                            <div class="modal-body py-5">
+                                <div class="container">
+                                    <div class="row">
+                                        <h5>{{ murojat.ism }} ni kutayotganlarga qo'shmoqchimisiz</h5>
+                                        <div class="col-12 py-2 text-center">
+                                            <input type="hidden" name="murojat_id" value="{{ murojat.id }}">
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-12 text-center">
+                                            <button type="submit" class="btn btn-primary">Qo'shish</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Kutayotganlarga qo'shildi</h5>
+                </div>
+                <div class="modal-body">
+                    <ul class="messages">
+                        {% for message in messages %}
+                        <li style="color: lime">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <a href="{% url 'admin-murojatlar' %}"><button type="button" class="btn btn-secondary" >Yopish</button></a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %} {% block js %}
+    <!-- Page level plugins -->
+    <script src="{% static 'yangi/vendor/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'yangi/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="{% static 'yangi/js/demo/datatables-demo.js' %}"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/js/select2.min.js'></script>
+
+    <script src="{% static 'multiple-select/script.js' %}"></script>
+
+    {% for message in messages %} {% if message.tags == 'success' %}
+    <script>
+        $(document).ready(function() {
+            $('#exampleModal').modal({
+                show: true
+            });
+        });
+    </script>
+    {% endif %} {% endfor %} {% endblock js %}
+
+

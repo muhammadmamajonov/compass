@@ -1,0 +1,195 @@
+{% extends 'manba.html' %} {% load static %} {% block guruhlar %}
+<li class="nav-item dropdown no-arrow mx-1">
+    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span style="border: 1px solid #A6A6A6; padding: 10px; border-radius: 8px;" class="  d-lg-inline text-gray-600 small">Guruhlar</span>
+    </a>
+    <!-- Dropdown - User Information -->
+    <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+        {% for guruh in guruhlar %}
+        <button onclick="guruhtalaba({{ guruh.id }})" class="btn btn-link" value="{{ guruh.id }}">
+                {{ guruh.nomi }}
+            </button> <br>{% endfor %}
+    </div>
+</li>
+{% endblock guruhlar %} {% block content %}
+<style>
+    .list-group li a {
+        text-decoration: none;
+        color: #A6A6A6;
+    }
+</style>
+
+
+
+
+<div class="container-fluid">
+    <div id="card" class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">O'quvchilar ro'yhati</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>T</th>
+                            <th>Ism Familya</th>
+                            <th>Guruh</th>
+                            <th>To'lov</th>
+                            <th>Tel Nomeri</th>
+                            <th>Manzil</th>
+                            <th>Qayerdan keldi</th>
+                            <th>Kim taklif qilgan</th>
+                            <th>Nechta o'quvchi chaqirgan</th>
+                            <th>Filial</th>
+                        </tr>
+                    </thead>
+                    <tbody id="gurtalabalar">
+                        {% for azo in talabalar %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td><a href="{% url 'talaba' azo.talaba.id %}" style="background-color: white; border: none; outline: none;" >{{ azo.talaba.ism_familya }}</a></td>
+                            <td>{{ azo.guruh.nomi }}</td>
+                            {% if azo.talaba in tolaganlar %}
+                            <td style="color: green;">Qilingan</td>
+                            {% elif azo.talaba.id in chala_tolovqigan_id %}
+                            <td style="color: #BC50FF;">Chala</td>
+                            {% elif azo.talaba.id in bonus %}
+                            <td style="color: lime;">Bonus</td>
+                            {% else %}
+                            <td style="color: red;">Qilinmagan</td>
+                            {% endif %}
+                            <td>{{ azo.talaba.telefon }}</td>
+                            <td>{{ azo.talaba.manzil }}</td>
+                            <td style="text-align: center;">{{ azo.talaba.qayerdan_keldi }}</td>
+                            <td style="text-align: center;">{% if azo.talaba.taklif_qilgan %}{% for talaba1 in talabalar %}{% if talaba1.talaba.id == azo.talaba.taklif_qilgan %}{{ talaba1.talaba.ism_familya }}{% endif %}{% endfor %}{% else %}─{% endif %}</td>
+                            <td style="text-align: center;">{{ azo.talaba.taklif_set.all.count }}</td>
+                            <td>{{azo.talaba.filyal.nomi}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
+
+{% for azo in talabalar %}
+<!-- Modal start -->
+<div class="modal fade" id="exampleModal{{ azo.talaba.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">{{ azo.talaba.ism_familya }} to'lovlar tarixi</h5>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <th>T</th>
+                    <th>Guruh</th>
+                    <th>Sana</th>
+                    <th>Summa</th>
+                    <tbody>
+                        {% for tolov in azo.talaba.tolov_set.all %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{tolov.guruh.nomi}}</td>
+                            <td>{{tolov.sana.year}} | {{tolov.oy}}</td>
+                            {% if tolov.summa == 0 %}
+                            <td style="color: lime">Bonus</td>
+                            {% else %}
+                            <td>{{tolov.summa}} so'm</td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endfor %}
+</div>
+<!-- Modal end -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    var i
+
+    function guruhtalaba(id) {
+        i = id
+        $.ajax({
+            type: 'GET',
+            url: "/dashboard/guruh-talabalari/",
+            data: {
+                i: i
+            },
+            success: function(data) {
+                var datas = data['data'];
+                var gt = '';
+                var t;
+                t = 0
+                for (var dt of datas) {
+                    ism = dt.ism;
+                    id = dt.id;
+                    guruh = dt.guruh;
+                    tel = dt.tel;
+                    tolov = dt.tolov;
+                    manzil = dt.manzil;
+                    taklif = dt.taklif;
+                    taklif_qilgan = dt.taklif_qilganlari;
+                    qayerdan_keldi = dt.qayerdan_keldi;
+                    filyal = dt.filyal;
+
+                    if (tolov == 1) {
+                        console.log("tolov:", tolov);
+                        t += 1
+                        gt +=
+                            `<tr>
+                                <td>` + t + `</td>
+                                <td><a href="/dashboard/talaba` + id  +`" style="background-color: white; border: none; outline: none;" >` + ism + `</a></td>
+                                <td>` + guruh + `</td>
+                                    <td style="color: green">Qilingan </td>
+                                <td>` + tel + `</td>
+
+                                <td>` + manzil + `</td>
+                                <td>` + qayerdan_keldi + `</td>
+                                <td style="text-align: center;">` + taklif + `</td>
+                                <td style="text-align: center;">` + taklif_qilgan + `</td>
+                                <td>` + filyal + `</td>
+                            </tr>`
+                    } else {
+                        console.log("to'lanmagan");
+                        t += 1
+                        gt +=
+                            `<tr>
+                                <td>` + t + `</td>
+                                <td><a href="/dashboard/talaba/` + id +`" style="background-color: white; border: none; outline: none;" >` + ism + `</a></td>
+                                <td>` + guruh + `</td>
+                                    <td style="color: red">Qilinmagan </td>
+                                <td>` + tel + `</td>
+                                <td>` + manzil + `</td>
+                                <td>` + qayerdan_keldi + `</td>
+                                <td style="text-align: center;">` + taklif + `</td>
+                                 <td style="text-align: center;">` + taklif_qilgan + `</td>
+                                 <td>` + filyal + `</td>
+                            </tr>`
+
+                    }
+
+
+                }
+
+                document.getElementById("gurtalabalar").innerHTML = gt;
+
+
+            }
+
+        })
+    }
+</script>
+{% endblock content %}

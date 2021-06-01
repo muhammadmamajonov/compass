@@ -1,0 +1,127 @@
+{% extends 'manba.html' %} {% load static %} {% block css %}
+<!-- Custom styles for this page -->
+<link href="{% static 'yangi/vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet"> {% endblock css %} {% block content %}
+
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+    <!-- DataTales Example -->
+    <div id="card" class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary"> Promotorlar ro'yxati</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Ism-Familya</th>
+                            <th>Fan</th>
+                            <th>Tel Nomeri</th>
+                            <th>Manzil</th>
+                            <th>Takliflar soni</th>
+                            <th>Bir oila</th>
+                            <th>Sharoit</th>
+                            <th>Tsdiqlash</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for bonus in bonuslar %}
+                        <tr>
+                            <td>{{ bonus.talaba.ism_familya }}</td>
+                            <td>{% for guruh in bonus.talaba.guruh_set.all %}<span  id="fan-rang" style="background-color: {{fan.rang}}; ">{{ guruh.nomi }}</span><br>{% endfor %}</td>
+                            <td>{{ bonus.talaba.telefon }}</td>
+                            <td>{{ bonus.talaba.manzil }}</td>
+                            <td>{{ bonus.takliflar_soni }}</td>
+                            <td>{% for bir_oila in bonus.bir_oila.all %}{{ bir_oila.ism_familya }}{% endfor %}</td>
+                            <td>{{bonus.talaba.sharoit}}</td>
+                            <td class="text-center"><i type="button" data-toggle="modal" data-target="#exampleModal{{ bonus.id }}" class="fas fa-plus-circle">Bonusni tasdiqlash</i>
+                        </td>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        {% for bonus in bonuslar %}
+        <div class="modal fade" id="exampleModal{{ bonus.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel" style="color: black">Tasdiqlamoqchimisiz?</h5>
+                    </div>
+                    <form action="{% url 'bonus-olganlar' %}" method="post">
+                        {% csrf_token %}
+                        <div class="modal-body py-5">
+                            <div class="container">
+                                <div class="row">
+                                    <!-- <div class="col-12 py-2 text-center">
+                                    <span>Qaysi oyga</span>
+                                        <select style="width: 300px; border-radius: 10px; padding: 8px; border: 1px solid black; outline: none;" class="font py-2" name="oy" id="browser">
+                                            {% for oy in oylar %}
+                                            <option value="{{ oy.id }}">{{ oy.oy_nomi }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div> -->
+                                    
+                                    <input type="hidden" value="{{ bonus.talaba.id }}" name="talaba_id">
+                                    <!-- <input type="hidden" value="{{talaba"> -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <div class="col-12 text-center">
+                                <button type="submit" class="btn btn-primary">Tasdiqlash</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            </div>
+            <div class="modal-body">
+
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li style="color: green" class="{{ message.tags }}"><h3>{{ message }} ✅</h3></li>
+                    {% endfor %}
+                </ul>
+
+            </div>
+            <div class="modal-footer">
+                <a href="{% url 'bonus-olganlar' %}"><button type="button" class="btn btn-secondary" >Yopish</button></a>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %} {% block js %}
+<!-- Page level plugins -->
+<script src="{% static 'yangi/vendor/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'yangi/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+
+<!-- Page level custom scripts -->
+<script src="{% static 'yangi/js/demo/datatables-demo.js' %}"></script>
+{% if messages %}
+    <script>
+    $(document).ready(function() {
+        $('#exampleModal').modal({
+            show: true
+        });
+    });
+</script>
+{% endif %}
+{% endblock js %}

@@ -1,0 +1,197 @@
+{% extends 'manba.html' %} {% load static %} {% block css %}
+<!-- Custom styles for this page -->
+<link href="{% static 'yangi/vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet"> {% endblock css %} {% block content %}
+
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+    <!-- DataTales Example -->
+    <div id="card" class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">O'quvchilar ro'yhati</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Ism-Familya</th>
+                            <th>Guruh</th>
+                            <th>Tel Nomeri</th>
+                            <th>To'lashi kerak</th>
+                            <th>To'lagan</th>
+                            <th>To'lov qilish</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for message in messages %}{{ message }} {% endfor %} 
+                        {% for chala in chala_tolovqigan %}
+                            <tr>
+                            <td>{{ chala.ism_familya }}</td>
+                            <td>{{ chala.guruh }}</td>
+                            <td>{{ chala.telefon }}</td>
+                            <td>{{ chala.tolashi }} so'm</td>
+                            <td>{{ chala.tolagan }} so'm</td>
+                            <td class="text-center"><i type="button" data-toggle="modal" data-target="#exampleModal{{ chala.id }}" class="fas fa-plus-circle"></i>
+                            </td>
+                            </tr>
+                        {% endfor %}
+                        {% for tolamagan in tolomaganlar %}
+                        <tr>
+                            <td>{{ tolamagan.ism_familya }}</td>
+                            <td>{{ tolamagan.guruh }}</td>
+                            <td>{{ tolamagan.telefon }}</td>
+                            <td>{{ tolamagan.tolashi }} so'm</td>
+                            <td>0</td>
+                            <td class="text-center"><i type="button" data-toggle="modal" data-target="#exampleModal{{ tolamagan.id }}" class="fas fa-plus-circle"></i>
+                            </td>
+                            
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+<!-- Modal -->
+        {% for chala in chala_tolovqigan %}
+        <div class="modal fade" id="exampleModal{{ chala.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel{{ chala.id }}" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">{{ chala.ism_familya }}. To'lov qilish</h5>
+                        <button type="button" style="outline: none;" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                    </div>
+                    <form action="{% url 'tolov-kiritish' %}" method="post">
+                        {% csrf_token %}
+                        <div class="modal-body py-5">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-12 py-2 text-center">
+                                        <select style="width: 300px; border-radius: 10px; padding: 8px; border: 1px solid black; outline: none;" class="font py-2" name="oy" id="browser">
+                                            {% for oy in oylar %}
+                                            <option value="{{ oy.id }}">{{ oy.oy_nomi }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-12 py-2 text-center">
+                                        <input name="pul" style="width: 300px; border-radius: 10px; padding: 8px; border: 1px solid black; outline: none;" type="number" placeholder="To'lov miqdori" required>
+                                    </div>
+                                    <div class="col-12 py-2 text-center">
+                                        <input type="hidden" name="tal_id" value="{{ chala.id }}">
+                                        <input type="hidden" name="gur_id" value="{{ chala.guruh_id }}">
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        <button type="submit" class="btn btn-primary">Tolov qilish</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <!-- Modal -->
+        {% for tolamagan in tolomaganlar %}
+        <div class="modal fade" id="exampleModal{{ tolamagan.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel{{ tolamagan.id }}" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">{{ tolamagan.ism_familya }}. To'lov qilish</h5>
+                        <button type="button" style="outline: none;" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                    </div>
+                    <form action="{% url 'tolov-kiritish' %}" method="post">
+                        {% csrf_token %}
+                        <div class="modal-body py-5">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-12 py-2 text-center">
+                                        <select style="width: 300px; border-radius: 10px; padding: 8px; border: 1px solid black; outline: none;" class="font py-2" name="oy" id="browser">
+                                            {% for oy in oylar %}
+                                            <option value="{{ oy.id }}">{{ oy.oy_nomi }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-12 py-2 text-center">
+                                        <input name="pul" style="width: 300px; border-radius: 10px; padding: 8px; border: 1px solid black; outline: none;" type="number" placeholder="To'lov miqdori" required>
+                                    </div>
+                                    <div class="col-12 py-2 text-center">
+                                        <input type="hidden" name="tal_id" value="{{ tolamagan.id }}">
+                                        <input type="hidden" name="gur_id" value="{{tolamagan.guruh_id }}">
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        <button type="submit" class="btn btn-primary">Tolov qilish</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Tolov qilindi</h5>
+            </div>
+            <div class="modal-body">
+                {% if i == 1 %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li class="{{ message.tags }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            <div class="modal-footer">
+                <a href="{% url 'tolov-kiritish' %}"><button type="button" class="btn btn-secondary" >Yopish</button></a>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock content %} {% block js %}
+<!-- Page level plugins -->
+<script src="{% static 'yangi/vendor/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'yangi/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+
+<!-- Page level custom scripts -->
+<script src="{% static 'yangi/js/demo/datatables-demo.js' %}"></script>
+{% if i == 1 %}
+    <script>
+    $(document).ready(function() {
+        $('#exampleModal').modal({
+            show: true
+        });
+    });
+</script>
+{% endif %}
+{% endblock js %}

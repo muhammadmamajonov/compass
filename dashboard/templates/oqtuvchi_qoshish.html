@@ -1,0 +1,285 @@
+{% extends 'manba.html' %} {% load static %} {% block guruhlar %}
+
+<li>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#oqituvchi-qoshishModal"><img style="width: 20px; height: 20px;" src="{% static 'yangi/img/plus.png' %}"> Qo'shish</button>
+</li>
+{% endblock guruhlar %} {% block content %}
+
+<style>
+    .reg {
+        margin-top: 48px;
+    }
+    
+    .font {
+        padding-left: 20px;
+    }
+    
+    .font:focus {
+        outline: none;
+    }
+    
+    input {
+        border: 1px solid #A6A6A6;
+    }
+    
+    .font button:hover {
+        background-color: white;
+    }
+</style>
+<div class="modal fade" id="oqituvchi-qoshishModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel" style="color: black">O'qituvchi qo'shish</h4>
+                <button type="button" style="outline: none;" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+            </div>
+
+            <form method="post" action="{% url 'oqituvchi-qoshish' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body py-5">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12 py-2 text-center">
+                                <input name="ism" style="width: 300px; border-radius: 10px; padding: 8px; border: 1px solid black; outline: none;" type="text" placeholder="Ism" required>
+                            </div>
+                            <div class="col-12 py-2 text-center">
+                                <input name="familya" style="width: 300px; border-radius: 10px; padding: 8px; border: 1px solid black; outline: none;" type="text" placeholder="Familya" required>
+                            </div>
+                            <div class="col-12 py-2 text-center">
+                                <input name="manzil" style="width: 300px; border-radius: 10px; padding: 8px; border: 1px solid black; outline: none;" type="text" placeholder="Manzil" required>
+                            </div>
+                            <div class="col-12 py-2 text-center">
+                                <input name="telefon" style="width: 300px; border-radius: 10px; padding: 8px; border: 1px solid black; outline: none;" type="text" placeholder="Telefon" required>
+                            </div>
+                            <div class="col-12 py-2 text-center">
+                                <select name="fan" id="fan" style="width: 300px; border-radius: 10px; padding: 8px; border: 1px solid black; outline: none;" type="text" placeholder="Fan" multiple required>
+                                    
+                                    {% for fan in fanlar %}
+                                    <option value="{{ fan.id }}">{{ fan.darsnomi }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-12 py-2">
+                                <span>Rasm</span>
+                                <input style="width: 70%; border-radius: 10px;" type="file" name="rasm" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <button type="submit" class="btn btn-primary">Qo'shish</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Begin Page Content -->
+<!-- <div class="container">
+    <div class="container">
+        <div class="text-center">
+            <form style="background-color: #ffffff; border-radius: 43px;" method="post" enctype="multipart/form-data" action="{% url 'oqituvchi-qoshish' %}" class="col-lg-12 col-md-8 text-center py-5 reg">
+                {% csrf_token %}
+                <h1 style="font-size: 40px!important;">O'qituvchi Ro'yhatga Olish</h1>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 py-3">
+                        <input style="width: 70%; border-radius: 43px; height: 61px;" class="font" type="text" name="ism" placeholder="Ism" required />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 py-3">
+                        <input style="width: 70%; border-radius: 43px; height: 61px;" class="font" type="text" name="familya" placeholder="Familiya" required />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 py-3">
+                        <input style="width: 70%; border-radius: 43px; height: 61px;" class="font" name="manzil" type="text" placeholder="Manzil kiriting" required/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 py-3">
+                        <input style="width: 70%; border-radius: 43px; height: 61px;" class="font" type="text" name="tel" placeholder="Telefon raqam kiriting" required/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 py-3">
+                        <select name="fan" style="width: 70%; border-radius: 43px; height: 61px;" class="font" list="browsers" placeholder="Qaysi fandan?" id="browser">
+                                        {% for fan in fanlar %}
+                                            <option value="{{ fan.id }}">{{ fan.darsnomi }}</option>
+                                        {% endfor %}
+                                    </select>
+
+                    </div>
+                </div>
+                <div class="col-12 py-2">
+                    <span>Rasm</span>
+                    <input style="width: 70%; border-radius: 10px;" type="file" name="rasm">
+                </div>
+
+
+
+                <div class="row py-3">
+                    <div class="col-lg-12 col-md-12 font">
+                        <button style="padding: 1rem; border-radius: 43px; width: 250px; outline: none; border: 1px solid #A6A6A6;">Qo'shish</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div> -->
+<!-- /.container-fluid -->
+
+<p></p>
+<p></p>
+<p></p>
+<p><br></p>
+<!-- Begin Page Content -->
+<div class="container-fluid">
+    <!-- DataTales Example -->
+    <div id="card" class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">O'qituvchilar ro'yhati</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>T</th>
+                            <th>Username</th>
+                            <th>Ism-Familya</th>
+                            <th>Fan</th>
+                            <th>Tel Nomeri</th>
+                            <th>Manzil</th>
+                            <th>O'chirish</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for oqituvchi in oqituvchilar %}
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ oqituvchi.useri}}</td>
+                        <td>{{ oqituvchi.ism }}.{{ oqituvchi.familya }}</td>
+                        <td style="color: white;">{% for fan in  oqituvchi.fani.all %}<span id="fan-rang" style="background-color: {{fan.rang}}; ">{{ fan.darsnomi }}</span><br>{% endfor %}</td>
+                        <td>{{ oqituvchi.tel }}</td>
+                        <td>{{ oqituvchi.manzil }}</td>
+                        <td><button class="btn btn-link" data-toggle="modal" data-target="#exampleModal{{ oqituvchi.id }}"><img src="{% static 'yangi/img/trash.svg' %}"></button></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        {% for oqituvchi in oqituvchilar %}
+        <div class="modal fade" id="exampleModal{{ oqituvchi.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel" style="color: black">O'qituvchini o'chirish</h5>
+
+                    </div>
+                    <form action="{% url 'oqituvchi-ochirish' %}" method="post">
+                        {% csrf_token %}
+                        <div class="modal-body py-5">
+                            <div class="container">
+                                <div class="row">
+                                    <input name="oqituvchi_id" type="hidden" value="{{ oqituvchi.id }}">
+                                    <h5 style="color: black">Rostan {{ oqituvchi.ism }} {{ oqituvchi.familya }} ni o'chirmoqchimisiz</h5>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        <button type="submit" class="btn btn-primary">O'chirish</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 style="color: red" class="modal-title" id="exampleModalLabel">O'qituvchi o'chirildi</h5>
+            </div>
+            <div class="modal-body">
+
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li style="color: black" class="{{ message.tags }}">{{ message }} o'chirildi</li>
+                    {% endfor %}
+                </ul>
+
+            </div>
+            <div class="modal-footer">
+                <a href="{% url 'oqituvchi-qoshish' %}"><button type="button" class="btn btn-secondary" >Yopish</button></a>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="staticBackdrop" data-keyboard="false" data-backdrop="static" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="color: red" class="modal-title" id="staticBackdropLabel">O'qituvchi qo'shildi</h3>
+            </div>
+            <div class="modal-body">
+                <ul class="messages">
+                    <div class="col-lg-9 col-md-12 mt-2" style="background-color: white;">
+
+                        {% for message in messages %}
+                        <h4 style="color: black">{{ message }}<br></h4>
+                        {% endfor %}
+                    </div>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <a href="{% url 'oqituvchi-qoshish' %}"><button type="button" class="btn btn-secondary" >Yopish</button></a>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %} {% block js %}
+</div>
+<!-- End of Main Content -->
+{% for message in messages %} {% if message.tags == "success" %}
+<script>
+    $(document).ready(function() {
+        $('#staticBackdrop').modal({
+            show: true
+        });
+    });
+</script>
+{% elif message.tags == "info" %}
+<script>
+    $(document).ready(function() {
+        $('#exampleModal').modal({
+            show: true
+        });
+    });
+</script>
+{% endif %} {% endfor %} {% endblock js %}

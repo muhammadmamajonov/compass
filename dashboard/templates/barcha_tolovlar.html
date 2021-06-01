@@ -1,0 +1,108 @@
+{% extends 'manba.html' %} {% load static %} {% block css %}
+<!-- Custom styles for this page -->
+<link href="{% static 'yangi/vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet"> {% endblock css %} {% block content %}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-3 col-md-12">
+            <div class="container-fluid py-2" style="background-color: white;">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12">
+                        <h3 style="font-size: 18px;">Barcha to'lovlar</h3>
+                        <p style="color: black; font-size: 25px;">{{ pul }} so'm</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="col-lg-9 col-md-12 mt-2" style="background-color: white;">
+            <table class="table table-bordered text-center my-2">
+                <thead>
+                    <tr>
+                        <th scope="col">Guruh</th>
+                        <th scope="col">O'qituvchi</th>
+                        <th scope="col">O'quvchilar soni</th>
+                        <th scope="col">Narxi(oy)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for guruh in guruhlar %}
+                    <tr>
+                        <td><a href="{% url 'guruh-tolaganlar' guruh.id %}">{{ guruh.nomi }} </a></td>
+                        <td>{{ guruh.oqituvchi }}</td>
+                        <td>{{ guruh.azolik_set.all.count }}</td>
+                        <td>{{ guruh.narxi }} so'm</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+<!-- End of Main Content -->
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-keyboard="false" data-backdrop="static" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">{{ guruh_tolagan.nomi }}</h5>
+            </div>
+            <div class="modal-body">
+                <ul class="messages">
+                    <div class="col-lg-9 col-md-12 mt-2" style="background-color: white;">
+                        <table class="table table-bordered text-center my-2">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Ism-Familya</th>
+                                    <th scope="col">Qaysi oy uchun</th>
+                                    <th scope="col">Qachon</th>
+                                    <th scope="col">Qancha</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for tolov in guruh_tolagan.tolov_set.all %}
+                                <tr>
+                                    <td>{{ tolov.talaba_ism.ism_familya }} </td>
+                                    <td>{{ tolov.oy }}</td>
+                                    <td>{{ tolov.sana }}</td>
+                                    {% if tolov.summa == 0 %}
+                                    <td style="color: green">Bo'nus</td>
+                                    {% else %}
+                                    <td>{{ tolov.summa }} so'm</td>
+                                    {% endif %}
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <a href="{% url 'tolovlar' %}"><button type="button" class="btn btn-secondary" >Yopish</button></a>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+{% endblock content %} {% block js %}
+<!-- Page level plugins -->
+<script src="{% static 'yangi/vendor/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'yangi/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+
+<!-- Page level custom scripts -->
+<script src="{% static 'yangi/js/demo/datatables-demo.js' %}"></script>
+
+{% if guruh_tolagan %}
+<script>
+    $(document).ready(function() {
+        $('#staticBackdrop').modal({
+            show: true
+        });
+    });
+</script>
+{% endif %} {% endblock js %}

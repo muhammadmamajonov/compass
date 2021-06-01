@@ -1,0 +1,163 @@
+{% extends 'manba_oqituvchi.html' %} {% load static %} {% block content %}
+
+
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+    <div class="row py-3">
+        <div style="border: 1px solid #a6a6a6; padding-top: 10px; padding-bottom: 10px; border-radius: 8px;" class="col-12 text-center">
+            <h2>Davomat</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-5">
+            <div class="card shadow mb-2">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6">
+                            <h6 class="m-0 font-weight-bold text-primary py-2" style="font-size: 18px; color: black!important;">Guruhlar</h6>
+                            <p style="font-size: 16px;">Guruhlar ro'yxati</p>
+                        </div>
+                    </div>
+                </div>
+                {% for guruh in guruhlari %}
+                <div class="col-lg-12 col-md-12 py-2">
+                    <div class="row pt-3">
+                        <div class="col-lg-6 col-md-6">
+                            <button type="button" class="btn btn-link"><h3 onclick="guruhtalaba({{ guruh.id }})" style="font-size: 16px; color: black!important;">{{guruh.nomi}}</h3></button>
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                            <h3 style="font-size: 16px; color: black!important; text-align: end;">{{ guruh.azolik_set.all.count }}</h3>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <script>
+            var i
+
+            function guruhtalaba(id) {
+                i = id
+                $.ajax({
+                    type: 'GET',
+                    url: "/dashboard/guruh-talabalari/",
+                    data: {
+                        i: i
+                    },
+                    success: function(data) {
+                        var datas = data['data'];
+                        var gt = '';
+                        for (var dt of datas) {
+                            ism = dt.ism,
+                                id = dt.id,
+                                guruh = dt.guruh,
+                                guruh_id = dt.guruh_id
+                                tel = dt.tel,
+                                tolov = dt.tolov,
+                                manzil = dt.manzil
+
+                            gt +=
+                                `
+                                <form action="{% url 'davomat' %}" method="post">
+                                {% csrf_token%}
+                                <div class="row">
+                                <div class="col-lg-6 col-md-12">
+                                    <input class="ml-2" type="checkbox" name="bor-yoq" value = "` + id +`" id="" > <span class="ml-2" style="color: black;">` + ism + `</span>
+                                </div>
+                                <div style="text-align: end;" class="col-lg-6 col-md-12 ">
+                                    <i type="button" data-toggle="modal" data-target="#exampleModal" class="fas fa-plus-circle"></i>
+                                </div>
+                                <input name = 'gur_id' type = 'hidden' value = '` + guruh_id + `'>
+                            </div>
+                            <hr>`;
+                        }
+                        gt += `<div class="col-lg-12 text-center pb-3">
+                                <button type="submit" class="btn btn-primary">Davomatni qabul qilish</button>
+                                </div> </form>`
+                        document.getElementById("guruh_talabalar").innerHTML = gt;
+                    }
+                })
+            }
+        </script>
+        <div class="col-lg-7">
+            <div class="card shadow mb-2">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <h6 class="m-0 font-weight-bold text-primary py-2" style="font-size: 21px; color: black!important;">Guruh o'quvchilar</h6>
+                        </div>
+                    </div>
+                </div>
+                <div id="guruh_talabalar" class="col-lg-12 col-md-12 py-1 pt-4">
+
+                </div>
+
+            </div>
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Test natijasini qoshish</h5>
+                            <button type="button" style="outline: none;" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                        </div>
+                        <div class="modal-body py-5">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 py-3 text-center">
+                                        <form action="/action_page.php">
+                                            <input style="border: 1px solid black; width: 70%; border-radius: 43px; height: 41px; outline: none;" placeholder="fanning nomi" list="browsers" name="browser">
+                                            <datalist id="browsers">
+                                                          <option value="ruskiy">
+                                                          <option value="angliskiy">
+                                                          <option value="nimetskiy">
+                                                          <option value="ispanskiy">
+                                                        </datalist>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="row text-center">
+                                    <div class="col-lg-12 col-md-12 py-3 text-center">
+                                        <form action="/action_page.php">
+                                            <input style="border: 1px solid black; width: 70%; border-radius: 43px; height: 41px; outline: none;" placeholder="O'quvchining ismi" list="name" name="browser">
+                                            <datalist id="name">
+                                                      <option value="Zarifa">
+                                                      <option value="Maftuna">
+                                                      <option value="Dildora">
+                                                      <option value="Omina">
+                                                      <option value="Nodira">
+                                                    </datalist>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 py-3 text-center">
+                                    <input style="border: 1px solid black; width: 70%; border-radius: 43px; height: 41px; outline: none;" class="font" type="text" placeholder="Test natijasi" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        <button type="button" class="btn btn-primary">Qo'shish</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
+
+{% endblock content %}

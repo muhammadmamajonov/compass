@@ -1,0 +1,46 @@
+ <script>
+                    var i
+
+                    function tolamaganlar(id) {
+                        console.log(id);
+                        i = id
+                        $.ajax({
+                            type: 'GET',
+                            url: "/dashboard/gr-tolamaganlar/",
+                            data: {
+                                i: i
+                            },
+                            success: function(data) {
+                                var datas = data['dt'];
+                                console.log(datas);
+                                var gt = '';
+                                var i = 0
+                                for (var dt of datas) {
+                                    ism = dt.ism_familya;
+                                    id = dt.id;
+                                    console.log(id, "idiidididididii");
+                                    console.log(ism)
+                                    i += 1
+                                    gt +=
+                                        `<div class="col-lg-12 col-md-12 py-1">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-12">
+                               <span>` + i + `</span><span class="ml-2" style="color: black;">` + ism + `</span>
+                            </div>
+                            <div style="text-align: end;" class="col-lg-6 col-md-12 Shoshilinch">
+                            </div>
+                        </div>
+                        <hr>
+                    </div>`;
+
+                                }
+
+                                document.getElementById("guruhdagi_tolamaganlar").innerHTML = gt;
+
+                            }
+
+                        })
+                    }
+                </script>
+
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

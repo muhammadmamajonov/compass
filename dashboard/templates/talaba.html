@@ -1,0 +1,156 @@
+{% extends 'manba.html' %} {% load static %} {% block css %}
+<!-- Custom styles for this page -->
+<link href="{% static 'yangi/vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet"> {% endblock css %} {% block content %}
+<div class="container-fluid">
+    <style>
+        #ismi {
+            text-align: center;
+        }
+    </style>
+    <h1 id="ismi">{{talaba.ism_familya}}</h1>
+    <!-- DataTales Example -->
+    <div id="card" class="card shadow mb-4">
+        <div class="row">
+            <div class="col-6">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary"> Davomat ro'yxati</h6>
+                </div>
+                <div class="card-body">
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable1" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Sana</th>
+                                    <th>Keldi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for davomat in talaba.davomat_set.all %}
+
+                                <tr>
+                                    <td>{{ davomat.sana }}</td>
+                                    {% if davomat.keldi %}
+                                    <td><img style="width: 30px;" src="{% static 'yangi/img/checked.svg' %}"></td>
+                                    {% else %}
+                                    <td><img style="width: 30px;" src="{% static 'yangi/img/cancel.svg' %}"></td>
+                                    {% endif %}
+                                </tr>
+
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary"> To'lovlar tarixi</h6>
+                </div>
+                <div class="card-body">
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <th>T</th>
+                                <th>Guruh</th>
+                                <th>Oy</th>
+                                <th>Sana</th>
+                                <th>Summa</th>
+                            </thead>
+                            <tbody>
+                                {% for tolov in talaba.tolov_set.all %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{tolov.guruh.nomi}}</td>
+                                    <td>{{tolov.oy}}</td>
+                                    <td>{{tolov.sana.year}} | {{tolov.oy}}</td>
+                                    {% if tolov.summa == 0 %}
+                                    <td style="color: lime">Bonus</td>
+                                    {% else %}
+                                    <td>{{tolov.summa}} so'm</td>
+                                    {% endif %}
+                                </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal start -->
+    <!-- DataTales Example -->
+    <div id="card" class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary"> Shaxsiy ma'lumotlar</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable2" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Guruh</th>
+                            <th>Telefon</th>
+                            <th>Manzil</th>
+                            <th>Kim taklif qilgan</th>
+                            <th>Qayerdan keldi</th>
+                            <th>Fanlar</th>
+                            <th>Qo'shilgan sana</th>
+                            <th>Oilaviy sharoiti</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{% for guruh in talaba.azolik_set.all %}{{guruh.guruh.nomi}}<br> {% endfor %}</td>
+                            <td>{{talaba.telefon}}</td>
+                            <td>{{talaba.manzil}}</td>
+                            <td style="text-align: center;">{% if talaba.taklif_qilgan %}{% for talaba1 in talabalar %}{% if talaba1.id == talaba.taklif_qilgan %}{{ talaba1.ism_familya }}{% endif %}{% endfor %}{% else %}─{% endif %}</td>
+                            <td>{{talaba.qayerdan_keldi}}</td>
+                            <td style="color: white;">{% for fan in talaba.fanlar.all %}<span  id="fan-rang" style="background-color: {{fan.rang}}; ">{{ fan.darsnomi }}</span><br>{% endfor %}</td> 
+                            <td>{{ talaba.sana }}</td>
+                            <td><span data-toggle="modal" data-target="#sharoitModal">{% if talaba.sharoit == 'Kam taminlangan' %}{{ talaba.sharoit }} {%endif%}<img width="20px" src="{% static 'yangi/img/edit.svg' %}"></span></td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="sharoitModal"   tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Oilaviy sharoiti</h5>
+                    </div>
+                    <form action="{% url 'talaba_sharoit_qosh' %}" method="post">
+                            {% csrf_token %}
+                        <div class="col-12 py-2 text-center">
+                            <select name="sharoit" id="fan" style="width: 300px; border-radius: 10px; padding: 8px; border: 1px solid black; outline: none;"  class="js-example-placeholder-multiple"  required>
+                                <option value="-">Yaxshi</option>
+                                <option value="Kam taminlangan">Kam taminlangan</option>
+                            </select>
+                            <input type="hidden" value="{{talaba.id}}" name="talaba_id">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" >Saqlash</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        {% endblock content %} {% block js %}
+        <!-- Page level plugins -->
+        <script src="{% static 'yangi/vendor/datatables/jquery.dataTables.min.js' %}"></script>
+        <script src="{% static 'yangi/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+        <!-- Page level custom scripts -->
+        <script src="{% static 'yangi/js/demo/datatables-demo.js' %}"></script>
+        {% endblock js %}

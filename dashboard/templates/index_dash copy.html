@@ -1,0 +1,369 @@
+{% extends 'manba.html' %} {% load static %} {% block content %}
+
+<style>
+    @media only screen and (max-width: 440px) {
+        .pc19 {
+            display: none;
+        }
+        .komp {
+            display: none;
+        }
+        .screen1280 {
+            display: none;
+        }
+    }
+    
+    @media only screen and (min-width: 577px) {
+        .trash {
+            margin-top: -15px;
+        }
+    }
+    
+    @media only screen and (max-width: 992px) and (min-width: 441px) {
+        .mobilniy {
+            display: none;
+        }
+        .komp {
+            display: none;
+        }
+        .screen1280 {
+            display: none;
+        }
+    }
+    
+    @media only screen and (max-width: 1532px) and (min-width: 993px) {
+        .mobilniy {
+            display: none;
+        }
+        .komp {
+            display: none;
+        }
+        .pc19 {
+            display: none;
+        }
+    }
+    
+    @media only screen and (max-width: 3000px) and (min-width: 1533px) {
+        .mobilniy {
+            display: none;
+        }
+        .pc19 {
+            display: none;
+        }
+        .screen1280 {
+            display: none;
+        }
+    }
+</style>
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Content Row -->
+    <div class="row">
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-4 col-md-6 mb-4 text-center">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Sh oydagi kirim</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ pul_shu_oy }} so'm</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-4 col-md-6 mb-4 text-center">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <h3 style="font-size: 16px; margin-top:5px; color: #4e73df">To'lov qilganlar <span id='shu_oy'></span> uchun
+                                <script>
+                                    var oy_nomi = ["Yanvar", "Fevral", "Mart", "Aprel", "May", "Iyun", "Iyul", "Avgust", "Sentabr", "Oktabr", "Noyabr", "Dekabr"];
+                                    var oy = new Date();
+                                    console.log(oy.getMonth());
+                                    document.getElementById("shu_oy").innerHTML = oy_nomi[oy.getMonth()]
+                                </script>
+                            </h3>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{tolovlar.count}}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Requests Card Example -->
+        <div class="col-xl-4 col-md-6 mb-4 text-center">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Tolov qilinishi kerak</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{tolamaganlar_soni}}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Row -->
+
+    <div class="row">
+
+        <!-- Area Chart -->
+        <div class="col-xl-12 col-lg-7">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary" style="font-size: 19px;">Oylik hisobot</h6>
+                    <p></p>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="chart-area">
+                        <canvas id="myAreaChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+
+        <div class="komp col-lg-4 col-md-12 text-center">
+            {% for v in varonka %}
+            <div>
+                <button class="btun" style="padding-top: 50px; background-image: url({{v.rasm1.url}}); background-color: #F5F9FC; background-repeat: no-repeat; background-size: cover; width: 100%; height: 120px; outline: none; border: none;">
+                <h3>Leadlar</h3>
+                <p>{{leads}}</p>
+            </button>
+            </div>
+            <div>
+                <button class="btun" style="margin-top: 5px; padding-top: 40px; background-image: url({{v.rasm2.url}}); background-color: #F5F9FC; background-repeat: no-repeat; background-size: cover; width: 80%; height: 110px; outline: none; border: none;">
+                <h3>Kutayotganlar</h3>
+                <p>{{kutayotganlar_soni}}</p>
+            </button>
+            </div>
+            <div>
+                <button class="btun" style="padding-top: 17px; margin-top: 5px; background-image: url({{v.rasm3.url}}); background-repeat: no-repeat; background-color: #F5F9FC; background-size: cover; width: 60%; height: 110px; outline: none; border: none;">
+                <h3>O'quvchilar</h3>
+                <p>{{barchaOquvchi}}</p>
+            </button>
+            </div>
+            <div>
+                <button class="btun" style="margin-top: 10px; background-image: url({{v.rasm4.url}}); background-repeat: no-repeat; background-size: cover; background-color: #F5F9FC; width: 40%; height: 100px; outline: none; border: none;">
+                <h3>Promotrlar</h3>
+                <p>{{promotorlar}}</p>
+            </button>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="screen1280 col-lg-4 col-md-12 text-center">
+            {% for v in varonka %}
+            <div>
+                <button class="btun" style="padding-top: 18px; margin-bottom: 5px; background-image: url({{v.rasm1.url}}); background-color: #F5F9FC; background-repeat: no-repeat; background-size: cover; width: 100%; height: 100px; outline: none; border: none;">
+                <h5>Leadlar</h5>
+                <p style="margin-top: -4px;">{{leads}}</p>
+            </button>
+            </div>
+            <div>
+                <button class="btun" style="padding-top: 17px; margin-bottom: 5px; background-image: url({{v.rasm2.url}}); background-color: #F5F9FC; background-repeat: no-repeat; background-size: cover; width: 80%; height: 90px; outline: none; border: none;">
+                <h5>Kutayotganlar</h5>
+                <p style="margin-top: -4px;">{{kutayotganlar_soni}}</p>
+            </button>
+            </div>
+            <div>
+                <button class="btun" style="margin-bottom: 5px; background-image: url({{v.rasm3.url}}); padding-top: 9px; background-repeat: no-repeat; background-color: #F5F9FC; background-size: cover; width: 60%; height: 80px; outline: none; border: none;">
+                <h5>O'quvchilar</h5>
+                <p style="margin-top: -4px;">{{barchaOquvchi}}</p>
+            </button>
+            </div>
+            <div>
+                <button class="btun" style="padding-top: 8px; background-image: url({{v.rasm4.url}}); background-repeat: no-repeat; background-size: cover; background-color: #F5F9FC; width: 40%; height: 70px; outline: none; border: none;">
+                <h6>Promotrlar</h6>
+                <p style="margin-top: -6px;">{{promotorlar}}</p>
+            </button>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="mobilniy col-lg-4 col-md-12 text-center">
+            {% for v in varonka %}
+            <div>
+                <button class="btun" style="padding-top: 30px; margin-bottom: 5px; background-image: url({{v.rasm1.url}}); background-color: #F5F9FC; background-repeat: no-repeat; background-size: cover; width: 100%; height: 106px; outline: none; border: none;">
+                <h2>Leadlar</h2>
+                <p style="font-size: 18px;">{{leads}}</p>
+            </button>
+            </div>
+            <div>
+                <button class="btun" style="padding-top: 20px; margin-bottom: 5px; background-image: url({{v.rasm2.url}}); background-color: #F5F9FC; background-repeat: no-repeat; background-size: cover; width: 80%; height: 100px; outline: none; border: none;">
+                <h2>Kutayotganlar</h2>
+                <p style="font-size: 18px;">{{kutayotganlar_soni}}</p>
+            </button>
+            </div>
+            <div>
+                <button class="btun" style="margin-bottom: 5px; background-image: url({{v.rasm3.url}}); padding-top: 15px; background-repeat: no-repeat; background-color: #F5F9FC; background-size: cover; width: 60%; height: 90px; outline: none; border: none;">
+                <h3>O'quvchilar</h3>
+                <p style="font-size: 18px;">{{barchaOquvchi}}</p>
+            </button>
+            </div>
+            <div>
+                <button class="btun" style="padding-top: 25px; background-image: url({{v.rasm4.url}}); background-repeat: no-repeat; background-size: cover; background-color: #F5F9FC; width: 40%; height: 90px; outline: none; border: none;">
+                <h5>Promotrlarлар</h5>
+                <p style="font-size: 16px;">{{promotorlar}}</p>
+            </button>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="pc19 col-lg-4 col-md-12 text-center">
+            {% for v in varonka %}
+            <div>
+                <button class="btun" style="padding-top: 65px; background-image: url({{v.rasm1.url}}); margin-bottom: 5px; background-color: #F5F9FC; background-repeat: no-repeat; background-size: cover; width: 100%; height: 130px; outline: none; border: none;">
+                <h3>Leadlar</h3>
+                <p>{{leads}}</p>
+            </button>
+            </div>
+            <div>
+                <button class="btun" style="padding-top: 52px; background-image: url({{v.rasm2.url}}); margin-bottom: 5px; background-color: #F5F9FC; background-repeat: no-repeat; background-size: cover; width: 85%; height: 120px; outline: none; border: none;">
+                <h3>Kutayotganlar</h3>
+                <p>{{kutayotganlar_soni}}</p>
+            </button>
+            </div>
+            <div>
+                <button class="btun" style="background-image: url({{v.rasm3.url}}); padding-top: 25px; background-repeat: no-repeat; margin-bottom: 5px; background-color: #F5F9FC; background-size: cover; width: 60%; height: 110px; outline: none; border: none;">
+                <h3>O'quvchilar</h3>
+                <p>{{barchaOquvchi}}</p>
+            </button>
+            </div>
+            <div>
+                <button class="btun" style="padding-top: 3px; margin-bottom: 5px; background-image: url({{v.rasm4.url}}); background-repeat: no-repeat; background-size: cover; background-color: #F5F9FC; width: 40%; height: 80px; outline: none; border: none;">
+                <h4 style="padding-top: 25px;">Promotrlar</h4>
+                <p>{{promotorlar}}</p>
+            </button>
+            </div>
+            {% endfor %}
+        </div>
+
+
+        <div class="col-xl-7 col-lg-5">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="py-2 align-items-center justify-content-between">
+                    <div class="container-fluid text-center">
+
+                        <div class="col-12">
+                            <h3 style="font-size: 16px;">Barcha o'quvchilar</h3>
+                            <p style="color: black; font-size: 20px;"><strong>{{barchaOquvchi}}</strong></p>
+                            <hr>
+                        </div>
+
+                        <form action="{% url 'fan-qosh' %}" method="post">
+                            {% csrf_token %}
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Fan" name='fan' required>
+                                <select style="width: 100px" name='rang' required>
+                                    <option>Rang</option>
+                                    <option style="background:#81b214" value="#81b214">Yashil</option>
+                                    <option style="background:#206a5d" value="#206a5d">To'q yashil</option>
+                                    <option style="background:#ffcc29" value="#ffcc29">Sariq</option>
+                                    <option style="background:#f58634" value="#f58634">To'q sariq</option>
+                                    <option style="background:#fb3640" value="#fb3640">Qizil</option>
+                                </select>
+                                <button class="btn btn-primary" type="submit">Qo'sh</button>
+                            </div>
+                        </form>
+                        {% for fan in fanlar %}
+                        <div class="py-2">{{ fan.darsnomi }}</div>
+                        <div class="row">
+                            <div class="col-lg-11 col-md-11 col-sm-11">
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width:{% widthratio fan.talaba_set.all.count talabalar_1_foiz 1 %}%;" aria-valuenow="{% widthratio fan.talaba_set.all.count talabalar_1_foiz 1 %}" aria-valuemin="0" aria-valuemax="{{talabalar.count}}">{% widthratio fan.talaba_set.all.count talabalar_1_foiz 1 %}%</div>
+                                </div>
+                            </div>
+                            <div class="col-lg-1 col-md-1 col-sm-1 trash">
+                                <form action="{% url 'fan-ochir' %}" method="POST"> {% csrf_token %}<input type="hidden" name="fan_ochir" value="{{fan.id}}"><button class="btn btn-link" type='submit'><img src="{% static 'yangi/img/trash.svg' %}"></button></form>
+                                <br>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <!-- Card Body -->
+
+            </div>
+        </div>
+    </div>
+    <!-- Pie Chart -->
+</div>
+<!-- /.container-fluid -->
+
+</div>
+<br><br>
+<!-- End of Main Content -->
+<div class="container-fluid">
+    <div id="card" class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Guruhlar ro'yxati</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>T</th>
+                            <th>Nomi</th>
+                            <th>Fan</th>
+                            <th>O'qituvchi</th>
+                            <th>O'quvchilar</th>
+                            <th>To'laganlar</th>
+                            <th>To'lamaganlar</th>
+                            <th>Umumiy yig'ilishi kerak</th>
+                            <th>Yig'ildi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for guruh in guruh_royxat %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td><form action="{% url 'guruh-tolamagan'  %}" method="get"><input name="guruh_id" type='hidden' value={{guruh.id}}><input class="btn btn-outline" type="submit" value="{{ guruh.nomi }}"></form></td>
+                            <td style="color: white;"><span id="fan-rang" style="background-color: {{guruh.fan_rang}}; ">{{ guruh.fan }}</span><br></td>
+                            <td>{{guruh.oqituvchi}}</td>
+                            <td>{{ guruh.oquvchilar_soni }}</td>
+                            <td class="text-center">{{ guruh.tolaganlar }}</td>
+                            <td style="text-align: center;">{{guruh.tolamaganlar}} </td>
+                            <td>{{guruh.umumiy_summ}} so'm</td>
+                            <td>{{guruh.yigildi}} so'm</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %} {% block js %}
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+{% endblock js %}

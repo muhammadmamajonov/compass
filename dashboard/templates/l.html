@@ -1,0 +1,31 @@
+{% for talaba in talabalar %}
+                            {% if talaba.taklif_set.all.count > 0 or talaba.fanlar.all.count > 1 or talaba.sharoit == "Kam taminlangan" %}
+                                <tr>
+                                    <td>{{ talaba.ism_familya }}</td>
+                                    <td style="color: white;">{% for fan in talaba.fanlar.all %}<span  id="fan-rang" style="background-color: {{fan.rang}}; ">{{ fan.darsnomi }}</span><br>{% endfor %}</td>
+                                    <td>{{ talaba.telefon }}</td>
+                                    <td>{{ talaba.manzil }}</td>
+                                    <td>{{ talaba.taklif_set.all.count }}</td>
+                                    <td>{% for talaba2 in talabalar %}{% if talaba.bir_oila == talaba2.id %}{{ talaba2.ism_familya }}{% endif %}{% endfor %}</td>
+                                    <td>{{talaba.sharoit}}</td>
+                                    <td class="text-center"><i type="button" data-toggle="modal" data-target="#exampleModal{{ talaba.id }}" class="fas fa-plus-circle">Bonusni tasdiqlash</i>
+                                </td>
+                                </tr>
+                            {% endif %}
+                            {% for talaba1 in talabalar %}
+                                {% if talaba.bir_oila == talaba1.id %}
+                                    <tr>
+                                        <td>{{ talaba.ism_familya }}</td>
+                                        <td style="color: white;">{% for fan in talaba.fanlar.all %}<span  id="fan-rang" style="background-color: {{fan.rang}}; ">{{ fan.darsnomi }}</span><br>{% endfor %}</td>
+                                        <td>{{ talaba.telefon }}</td>
+                                        <td>{{ talaba.manzil }}</td>
+                                        <td>{{ talaba.taklif_set.all.count }}</td>
+                                        <td>{% for talaba2 in talabalar %}{% if talaba.bir_oila == talaba2.id %}{{ talaba2.ism_familya }}{% endif %}{% endfor %}</td>
+                                        <td>{{talaba.sharoit}}</td>
+                                        <td class="text-center"><i type="button" data-toggle="modal" data-target="#exampleModal{{ talaba.id }}" class="fas fa-plus-circle">Bonusni tasdiqlash</i>
+                                    </td>
+                                    </tr>
+                                {% endif %}
+                                
+                            {% endfor %}
+                        {% endfor %}

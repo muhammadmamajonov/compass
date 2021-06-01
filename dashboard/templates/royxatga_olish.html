@@ -1,0 +1,138 @@
+{% extends 'manba.html' %} {% load static %} {% block css %}
+<link rel="stylesheet" href="{% static 'yangi/css/style.css' %}">
+<link rel="stylesheet" href="{% static 'yangi/css/bootstrap-select.css' %}"> {% endblock css %} {% block content %}
+<style>
+    .reg {
+        margin-top: 48px;
+    }
+    
+    .font {
+        padding-left: 20px;
+    }
+    
+    .font:focus {
+        outline: none;
+    }
+    
+    input {
+        border: 1px solid #A6A6A6;
+    }
+    
+    .font button:hover {
+        background-color: white;
+    }
+</style>
+
+
+<!-- Begin Page Content -->
+<div class="container">
+    <div class="container">
+        <div class="text-center">
+            <form action="{% url 'royxat-olish-form' %}" method="post" enctype="multipart/form-data" style="background-color: #ffffff; border-radius: 43px;" class="col-lg-12 col-md-12 text-center py-5 reg">
+                {% csrf_token %}
+                <h1 style="font-size: 40px!important;">O'quvchi ro'yhatga olish</h1>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 py-3">
+                        <input style="width: 70%; border-radius: 43px; height: 61px;" name="ism" class="font" type="text" placeholder="Ism familiya kiriting" required />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 py-3">
+                        b <input style="width: 70%; border-radius: 43px; height: 61px;" name="manzil" class="font" type="text" placeholder="Manzil kiriting" required/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 py-3">
+                        <input style="width: 70%; border-radius: 43px; height: 61px;" class="font" name="telefon" type="text" placeholder="Telefon raqam kiriting" required/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 py-3">
+                        <select style="width: 70%; border-radius: 43px; height: 61px;" class="font" list="browsers" name="fan" name="browser" id="browser">
+                                        {% for fan in fanlar %}
+                                            <option value="{{ fan.id }}">  {{ fan.darsnomi }}</option>
+                                        {% endfor %}
+                                        </select>
+                    </div>
+                </div>
+                <div class="col-12 py-2">
+                    <span>Pasport rasm</span>
+                    <input style="width: 70%; border-radius: 10px;" type="file" name="pasport_rasm">
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 py-3">
+                        <span style="color: black">Kim taklif qildi</span>
+                        <select style="width: 70%; border-radius: 43px; height: 61px;" class="selectpicker" list="browsers" name="taklif" data-live-search="true" name="browser" id="browser">
+                            <optgroup label="O'quvchilar">
+                            <option></option>
+                            {% for talaba in talabalar %}
+                            <option value="{{ talaba.id }}">{{ talaba.ism_familya }}</option>
+                            {% endfor %}
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 py-3">
+                        <span style="color: black">Bir oiladan</span>
+                        <select style="width: 70%; border-radius: 43px; height: 61px;" class="selectpicker" list="browsers" name="taklif" data-live-search="true" name="browser" id="browser">
+                            <optgroup label="O'quvchilar">
+                            <option></option>
+                            {% for talaba in talabalar %}
+                            <option value="{{ talaba.id }}">{{ talaba.ism_familya }}</option>
+                            {% endfor %}
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+                <div class="row py-3">
+                    <div class="col-lg-12 col-md-12 qoshish font">
+                        <button style="padding: 1rem; border-radius: 43px; width: 250px; outline: none; border: 1px solid #A6A6A6;">Qo'shish</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
+<div class="modal fade" id="exampleModal" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ro'yxatga olindi</h5>
+            </div>
+            <div class="modal-body">
+
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li style="color: black" class="{{ message.tags }}">
+                        <h4>{{ message }}</h4>
+                    </li>
+                    {% endfor %}
+                </ul>
+
+            </div>
+            <div class="modal-footer">
+                <a href="{% url 'royxat-olish-form' %}"><button type="button" class="btn btn-secondary" >Yopish</button></a>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %} {% block js %} {% if messages %}
+<script>
+    $(document).ready(function() {
+        $('#exampleModal').modal({
+            show: true
+        });
+    });
+</script>
+{% endif %}
+<script src="{% static 'yangi/js/bootstrap-select.js' %}"></script>
+<script src="{% static 'yangi/js/bootstrap-select.min.js' %}"></script>
+{% endblock js %}

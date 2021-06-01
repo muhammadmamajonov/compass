@@ -1,0 +1,511 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Compass</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!-- css links -->
+    <link href="{% static 'public/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" media="all">
+    <link href="{% static 'public/css/slider.css' %}" rel="stylesheet" type="text/css" media="all">
+    <link rel="stylesheet" type="text/css" href="css/facultystyle.css" />
+    <link href="{% static 'public/css/style.css' %}" rel="stylesheet" type="text/css" media="all">
+    <!-- /css links -->
+    <link href='//fonts.googleapis.com/css?family=Dancing+Script:400,700' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Raleway:400,300,500,600,700,800' rel='stylesheet' type='text/css'>
+    <script src="{% static 'public/js/SmoothScroll.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'public/js/modernizr.custom.js' %}"></script>
+</head>
+
+<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
+
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+                <a class="navbar-brand">Compass</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="active"><a href="#myPage">BOSH SAHIFA</a></li>
+                    <li><a href="#about">BIZ HAQIMIZDA</a></li>
+                    <li><a href="#gallery">YANGILIKLARIMIZ</a></li>
+                    <li><a href="#faculty">O'QITUVCHILAR</a></li>
+                    <li><a href="#events">TADBIRLAR</a></li>
+                    <li><a href="#contact">MUROJAAT</a></li>
+
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+    </nav>
+    <!-- /Fixed navbar -->
+    <!-- xabar -->
+    <div class="modal fade active" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    {% for message in messages %}
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4>{{message}}</h4>
+
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /xabar -->
+
+    <!-- Banner -->
+    <div class="slider">
+
+        <div id="top" class="callbacks_container-wrap">
+            <ul class="rslides" id="slider3">
+                <li>
+                    <div class="slider1" style="background: url({{ slider1.rasm.url }}) no-repeat 0px 0px; background-size: cover!important;"></div>
+                </li>
+                <li>
+                    <div class="slider1 slider2" style="background: url({{slider2.rasm.url}}) no-repeat 0px 0px; background-size: cover!important;"></div>
+                </li>
+                <li>
+                    <div class="slider1 slider3" style="background: url({{slider3.rasm.url}})"></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- /Banner -->
+    <!-- About -->
+    <section id="about">
+        <div class="about">
+            <div class="container">
+                <div class="abouttop">
+                    <h3>Biz Haqimizda</h3>
+                    <label class="line"></label>
+                    <h6>{{haqimizda.qisqa}} </h6>
+                    <div class="col-md-3 col-sm-3 aboutleft">
+                        <h4>Biz haqimizda so'zlar</h4>
+                    </div>
+                    <div class="col-md-6 col-sm-6 aboutmiddle">
+                        <div class="aboutleftbottom">
+                            <p>{{haqimizda.toliq|truncatewords:30}}</p>
+                            <a href="#" data-toggle="modal" data-target="#myModal">Batafsil</a>
+                            <!-- Modal -->
+                            <div class="modal fade" id="myModal" role="dialog">
+                                <div class="modal-dialog">
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <p>{{haqimizda.toliq}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <img src="{% static 'public/images/bb3.jpg' %}">
+                    </div>
+                    <div class="col-md-3 col-sm-3 aboutright">
+                        <div class="aboutrighttop">
+                            <div class='numscroller numscroller-big-bottom' data-slno='1' data-min='0' data-max='{{talabalar_soni}}' data-delay='.5' data-increment="100">{{talabalar_soni}}</div>
+                            <label class="aline"></label>
+                            <p class="stats-info">O'quvchilar</p>
+                        </div>
+                        <div class="aboutrightbottom">
+                            <div class='numscroller numscroller-big-bottom' data-slno='1' data-min='0' data-max='{{fanlar_soni}}' data-delay='.5' data-increment="5">{{fanlar_soni}}</div>
+                            <label class="aline"></label>
+                            <p class="stats-info">Fanlar</p>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="aboutbottom">
+                {% for malumot1 in malumotlar1 %}
+                <div class="col-md-3 col-sm-3 aboutimg arrow">
+                    <img src="{{malumot1.rasm.url}}">
+                </div>
+                <div class="col-md-3 col-sm-3 abouttext">
+                    <h4>{{malumot1.nomi}}</h4>
+                    <p> {{malumot1.toliq|truncatechars:300}}</p>
+                    <a href="#" data-toggle="modal" data-target="#myModal{{malumot1.id}}">Batafsil</a>
+                    <!-- Modal -->
+                    <div class="modal fade" id="myModal{{malumot1.id}}" role="dialog">
+                        <div class="modal-dialog">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4>{{malumot1.nomi}}</h4>
+                                    <img src="{{malumot1.rasm.url}}">
+                                    <p>{{malumot1.toliq}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %} {% for malumot2 in malumotlar2 %}
+                <div class="col-md-3 col-sm-3 abouttext">
+                    <h4>{{malumot2.nomi}}</h4>
+                    <p>{{malumot2.toliq|truncatechars:300}}</p>
+                    <a href="#" data-toggle="modal" data-target="#myModal{{malumot2.id}}">Batafsil</a>
+                    <!-- Modal -->
+                    <div class="modal fade" id="myModal{{malumot2.id}}" role="dialog">
+                        <div class="modal-dialog">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4>{{malumot2.nomi}}</h4>
+                                    <img src="{{malumot2.rasm.url}}">
+                                    <p>{{malumot2.toliq}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-3 aboutimg arrow2">
+                    <img src="{{malumot2.rasm.url}}">
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </section>
+    <!-- /About -->
+    <!-- Gallery Section -->
+
+    <div class="gallery" id="gallery">
+        <div class="container">
+            <hr>
+            <hr>
+            <h3>YANGILIKLAR</h3>
+            <label class="line"></label>
+            <h6>{{izohlar.galareya}}</h6>
+            <section id="gallery" class="parallax section">
+
+                <div class="container">
+                    <div class="row">
+                        {% for rasm in gallery %}
+                        <div class="col-md-4 col-sm-4 ggrids">
+                            <a href="{{rasm.rasm.url}}" title="{{rasm.nomi}}">
+                                <img src="{{rasm.rasm.url}}">
+                                <div class="description">
+                                    <span class="caption">{{rasm.nomi}}</span>
+                                    <span class="camera"></span>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </a>
+                        </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <!-- //Gallery Section -->
+    <!-- Faculty Section -->
+    <div class="faculty" id="faculty">
+        <div class="container">
+            <div class="ftop">
+                <h3>O'QITUVCHILAR</h3>
+                <label class="line"></label>
+                <p>{{izoxlar.oqituvchi}} </p>
+            </div>
+            {% for oqituvchi in oqituvchilar %}
+            <div class="col-md-3 col-sm-3 fgrids" style="margin-top: 30px; width: 285px; height: 378px;">
+                <div class="view view-fourth">
+                    <img src="{{oqituvchi.rasm.url}}" />
+                    <div class="mask">
+
+
+                        <br><br><br><br><br><br><br><br><br>
+
+                    </div>
+                </div>
+                <div class="ftext">
+                    <h4>{{oqituvchi.ism}}</h4>
+                    <h4>{{oqituvchi.familya}}</h4>
+                    <label class="fline"></label>
+                    <h5>{{ oqituvchi.fani}}</h5>
+                </div>
+            </div>
+            {% endfor %}
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <!-- //Faculty Section -->
+
+    <!-- Stats Section -->
+    <div class="stats" id="stats">
+        <div class="container">
+            <div class="stats-info">
+                <div class="col-md-3 col-sm-3 stats-grid slideanim">
+                    <div class='numscroller numscroller-big-bottom' data-slno='1' data-min='0' data-max='{{ oqituchilar_soni }}' data-delay='.5' data-increment="1">{{oqituchilar_soni}}</div>
+                    <label class="line"></label>
+                    <p class="stats-info">O'qituvchilar</p>
+                </div>
+                <div class="col-md-3 col-sm-3 stats-grid slideanim">
+                    <div class='numscroller numscroller-big-bottom' data-slno='1' data-min='0' data-max='{{ oquvchilar_soni }}' data-delay='.5' data-increment="10">{{oquvchilar_soni}}</div>
+                    <label class="line"></label>
+                    <p class="stats-info">O'quvchilar</p>
+                </div>
+                <div class="col-md-3 col-sm-3 stats-grid slideanim">
+                    <div class='numscroller numscroller-big-bottom' data-slno='1' data-min='0' data-max="{{bitirganlar.muvofaqqiyatli}}" data-delay='.5' data-increment="10">{{bitirganlar.muvofaqqiyatli}}</div>
+                    <label class="line"></label>
+                    <p class="stats-info">Muvofaqqiyatli Bitirganlar</p>
+                </div>
+                <div class="col-md-3 col-sm-3 stats-grid slideanim">
+                    <div class='numscroller numscroller-big-bottom' data-slno='1' data-min='0' data-max="{{bitirganlar.sertifikat_olganlar}}" data-delay='.5' data-increment="10">{{bitirganlar.sertifikat_olganlar}}</div>
+                    <label class="line"></label>
+                    <p class="stats-info">Sertifikat olganlar</p>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Stats Section -->
+    <!-- Events Section -->
+    <div class="events" id="events">
+        <div class="container">
+            <h3>TADBIRLAR</h3>
+            <label class="line"></label>
+            <h6>{{izoxlar.tadbirlar}} </h6>
+            {% for event in events %}
+            <div class="col-md-6 col-sm-6 egrid">
+                <div class="img">
+                    <img src="{{event.rasm.url}}">
+                </div>
+                <div class="textt">
+                    <div class="date">
+                        <h5>{{ event.sana }}</h5>
+                    </div>
+                    <h3>{{event.nomi}}</h3>
+                    <label class="eline"></label>
+                    <p>{{ event.izox|truncatechars:100 }}</p>
+                    <a href="#" data-toggle="modal" data-target="#myModa{{event.id}}">Batafsil</a>
+                    <!-- Modal -->
+
+                    <div class="modal fade" id="myModa{{event.id}}" role="dialog">
+                        <div class="modal-dialog">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4>{{event.nomi}}</h4>
+                                    <p>{{event.izox}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            {% endfor %}
+
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <!--// Events Section -->
+    <!-- Clients Section -->
+    <div class="clients">
+        <div class="container">
+            <h3></h3>
+            <ul>
+                <li>
+                    <a></a>
+                </li>
+                <li>
+                    <a></a>
+                </li>
+                <li>
+                    <a></a>
+                </li>
+                <li>
+                    <a></a>
+                </li>
+                <li>
+                    <a></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!--// Clients Section -->
+    <!-- Contact Section -->
+    <div class="contact" id="contact">
+        <div class="container">
+            <div class="ctop">
+                <h3>Murojaat</h3>
+                <label class="line"></label>
+                <p>{{izoxlar.murojaat}} </p>
+            </div>
+            <div class="cbottom">
+                <div class="col-md-6 col-sm-6 cbl">
+                    <h4>Manzil:</h4>
+                    <h5>{{contact.manzil}}</h5>
+                    <h4> Telefon:</h4>
+                    <h5>{{contact.telefon}}</h5>
+                    <h4>E-mail:</h4>
+                    <h5><a href="mailto:{{contact.email}}">{{contact.email}}</a></h5>
+
+                </div>
+                <div class="col-md-6 col-sm-6 cbr">
+                    <form action="{% url 'index' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="text" name="ism" placeholder="Ism-Familya" required="">
+                        <input type="text" name="tel" placeholder="Tel:" required="">
+                        <select name="fanlar" id="fan">
+							{% for fan in fanlar %}
+							<option  value="{{fan.id}}">{{fan.darsnomi}}</option>
+							{% endfor %}
+						</select>
+
+                        <input type="text" name="manzil" placeholder="Manzil"><br>
+                        <textarea rows="5" cols="50" name="malumot" placeholder="Qiziqishlaringiz va Qaysi yo'nalishda o'qimoqchisiz "></textarea><br>
+                        <input type="submit" value="Yuborish">
+                    </form>
+
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- //Contact Section -->
+    <!-- Social Icons Section -->
+
+    <div style="min-height: 350px!important;" class="socialicons">
+        <div class="container">
+            <br><br><br>
+            <div class="row">
+                {% for tarmoq in tarmoqlar %} {% if forloop.counter > 4 %}<br><br><br><br><br><br><br><br><br>{% endif %}
+                <div class="col-md-3 text-center col-sm-4">
+                    <a href="{{tarmoq.url}}"><img src="{{tarmoq.icon.url}}" style="width: 30px; height: 30px">
+                        <h3>{{tarmoq.tarmoq_nomi}}</h3>
+                        <h5>Bizni kuzatib boring</h5>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+    </div>
+    <!-- //Social Icons Section -->
+    <!-- Footer Section -->
+    <div class="footer">
+        <div class="container">
+            <!-- <p> &copy; 2016 Career Builder. All Rights Reserved | Design by <a href="http://w3layouts.com">W3layouts</a></p> -->
+        </div>
+    </div>
+
+    {# Modal #}
+    <div class="modal fade" id="staticBackdrop" data-keyboard="false" data-backdrop="static" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 style="color: red" class="modal-title" id="staticBackdropLabel">Qiziqishingiz uchun raxmat</h3>
+                </div>
+                <div class="modal-body">
+                    <ul class="messages">
+                        <div class="col-lg-9 col-md-12 mt-2" style="background-color: white;">
+                            {% for message in messages %}
+                            <h4 style="color: black">{{ message }}<br></h4>
+                            {% endfor %}
+                        </div>
+                    </ul>
+                </div><br><br><br><br><br>
+                <div class="modal-footer">
+                    <a href=""><button type="button" class="btn btn-secondary" >Yopish</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- //Footer Section -->
+    <!-- js files -->
+    <script src="{% static 'public/js/jquery.min.js' %}"></script>
+    <script src="{% static 'public/js/bootstrap.min.js' %}"></script>
+
+    <!-- Scripts For Navbar -->
+
+    <script src="{% static 'public/js/jquery.scrollTo.min.js' %}"></script>
+
+    <!--// Scripts For Navbar -->
+
+    <!-- Scripts For Gallery Section -->
+    <script src="{% static 'public/js/jquery.localScroll.min.js' %}"></script>
+    <script src="{% static 'public/js/jquery.magnific-popup.min.js' %}"></script>
+    <script src="{% static 'public/js/common.js' %}"></script>
+    <!--// Scripts For Gallery Section -->
+
+    <script>
+        $(document).ready(function() {
+            // Add smooth scrolling to all links in navbar + footer link
+            $(".navbar a, footer a[href='#myPage']").on('click', function(event) {
+
+                // Store hash
+                var hash = this.hash;
+
+                // Using jQuery's animate() method to add smooth page scroll
+                // The optional number (900) specifies the number of milliseconds it takes to scroll to the specified area
+                $('html, body').animate({
+                    scrollTop: $(hash).offset().top,
+                }, 900, function() {
+
+                    // Add hash (#) to URL when done scrolling (default click behavior)
+                    window.location.hash = hash;
+                });
+            });
+        })
+    </script>
+
+    <!-- /js files -->
+    <!-- Script For Number Scrolling -->
+    <script type="text/javascript" src="{% static 'public/js/numscroller-1.0.js' %}"></script>
+
+    <!-- //Script For Number Scrolling -->
+    <script src="{% static 'public/js/responsiveslides.min.js' %}"></script>
+    <script>
+        // You can also use "$(window).load(function() {"
+        $(function() {
+            // Slideshow 4
+            $("#slider3").responsiveSlides({
+                auto: true,
+                pager: true,
+                nav: false,
+                speed: 500,
+                namespace: "callbacks",
+                before: function() {
+                    $('.events').append();
+                },
+                after: function() {
+                    $('.events').append();
+                }
+            });
+        });
+    </script>
+    {% if messages %}
+    <script>
+        $(document).ready(function() {
+            $('#staticBackdrop').modal({
+                show: true
+            });
+        });
+    </script>
+    {% endif %}
+</body>
+
+</html>
