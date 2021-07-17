@@ -1,6 +1,8 @@
 var i
 
-function guruhtalaba(id) {
+function guruhtalaba() {
+    id = document.getElementById("guruh").value
+    
     i = id
     $.ajax({
         type: 'GET',
@@ -12,7 +14,6 @@ function guruhtalaba(id) {
             var datas = data['data'];
             var gt = '';
             i = 0;
-            console.log(datas)
 
             for (var dt of datas) {
                 ism = dt.ism;
@@ -24,28 +25,12 @@ function guruhtalaba(id) {
                 manzil = dt.manzil;
                 i = i + 1;
                 gt +=
-                    ` 
-                    <tr>
-                        <td>` + i + `</td>
-                        <td> <button type="button" class="btn btn-link"  data-toggle="modal" data-target="#oquvchi_davomatModal` + id + `">` + ism + `</button></td>
-                        <td>` + guruh + `</td>
-                        <td>` + tel + `</td>
-                        <td><input class="ml-2" type="checkbox" name="bor-yoq" value="` + id + `"></td>
-                    </tr>`;
+                    `<option value="" disabled selected>--Talaba--</option>
+                     <option value="` + id + `">` + ism + `</option>
+                    `;
             }
 
-            gt += `<tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td> <input class="btn btn-outline-primary" type="submit" value="davomat" ></td>
-                    <input type='hidden' name="gur_id" value="` + guruh_id + `"
-                    </tr>
-                   
-                    `;
-            console.log(gt)
-            document.getElementById("guruh_talabalar").innerHTML = gt;
+            document.getElementById("talaba").innerHTML = gt;
         }
     })
 }

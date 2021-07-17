@@ -608,6 +608,9 @@ def TolovKiritish(request):
                 tolamaganlar.append(tal)
         guruhlar = Guruh.objects.all()
         oylar = Oy.objects.all()
+
+
+
         print(i, "iiiiiiiiiiiiiii")
         return render(request, 'tolov_qilish.html',
                       {'i': i, 'tolomaganlar': tolamaganlar, 'talabalar': talabalar, 'tolovlar': tolovlar,
@@ -1097,3 +1100,29 @@ def talaba_sharoit_qosh(request):
                     break
             return redirect("/dashboard/talaba/{}/".format(talaba_id))
     return redirect("/dashboard/talaba/{}/".format(talaba_id))
+
+
+def  Kitob_olganlar(request):
+    if request.method == 'POST':
+        uslub = request.POST.get('uslub')
+        if uslub == 'topshirish':
+            holat = request.POST['holat']
+            kitob_olgan_id = request.POST['kitob_olgan_id']
+            kitob_olgan = KitobOlganlar.objects.get(id=kitob_olgan_id)
+            kitob_olgan.holat = holat
+            kitob_olgan.save()
+            
+            return redirect('/dashboard/kitob-olganlar/')
+
+        talaba_id = request.POST['talaba_id']
+        kitob = request.POST['kitob']
+        qaytaradi = request.POST['qaytaradi']
+
+        kitob_olgan = KitobOlganlar.objects.create(talaba_id=talaba_id, kitob=kitob, qaytaradi=qaytaradi)
+
+        return redirect('/dashboard/kitob-olganlar/')
+    
+    guruhlar = Guruh.objects.all()
+    kitob_olganlar = KitobOlganlar.objects.filter(holat=1)
+
+    return render(request, 'kitob-olganlar.html', {'kitob_olganlar':kitob_olganlar, 'guruhlar':guruhlar})

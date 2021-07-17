@@ -1,0 +1,158 @@
+{% extends 'manba.html' %} {% load static %} {% block guruhlar %}
+<li class="nav-item dropdown no-arrow mx-1">
+    
+        <button class="btn btn-primary" style="border: 1px solid #A6A6A6; padding: 10px; border-radius: 8px;" data-toggle="modal" data-target="#KitobBerishModal"><span  class="  d-lg-inline text-white-600 small" >Kitob berish </span></button>
+   
+    <!-- Dropdown - User Information -->
+    
+</li>
+<link rel="stylesheet" href="{% static 'yangi/css/bootstrap-select.css' %}">
+<link href="{% static 'yangi/vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+{% endblock guruhlar %} {% block content %}
+<style>
+    .list-group li a {
+        text-decoration: none;
+        color: #A6A6A6;
+    }
+</style>
+
+<div class="container-fluid">
+    <div id="card" class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Kitob olganlar ro'yhati</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>T</th>
+                            <th>Ism Familya</th>
+                            <th>Guruh</th>
+                            <th>Tel Nomeri</th>
+                            <th>Manzil</th>
+                            <th>Filial</th>
+                            <th>Olgan kitobi</th>
+                            <th>Holat</th>
+                        </tr>
+                    </thead>
+                    <tbody id="gurtalabalar">
+                        {% for kitob_olgan in kitob_olganlar %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{kitob_olgan.talaba.ism_familya}}</td>
+                            <td>{% for guruh in kitob_olgan.talaba.guruh_set.all %} {{guruh.nomi}}{% endfor %}</td>
+                            <td>{{kitob_olgan.talaba.telefon}}</td>
+                            <td>{{kitob_olgan.talaba.manzil}}</td>
+                            <td>{{kitob_olgan.talaba.filyal.nomi}}</td>
+                            <td>{{kitob_olgan.kitob}}</td>
+                            <td>Topshirmagan <button data-toggle="modal" data-target="#KitobTopshirishModal_{{kitob_olgan.id}}" class="btn btn-link"><img style="width: 20px;" src="{% static 'yangi\img\edit.svg' %}" alt=""></button></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
+
+<!-- Topshirish Modal  -->
+{% for kitob_olgan in kitob_olganlar %}
+<div class="modal fade" id="KitobTopshirishModal_{{kitob_olgan.id}}" tabindex="-1" role="dialog" aria-labelledby="KitobTopshirishModalLabel_{{kitob_olgan.id}}" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="{% url 'kitob_olganlar' %}" method="POST">
+                {% csrf_token %}
+            <div class="modal-header">
+                <h5 class="modal-title" id="KitobTopshirishModalLabel_{{kitob_olgan.id}}">Kitob Topshirish</h5>
+            </div>
+            <div class="modal-body">
+                <div class="col-12 py-2 text-center">
+                    <select name="holat"  style="width: 300px; border-radius: 10px; padding: 8px; border: 1px solid black; outline: none;"  required>
+                        <option value="1" >Topshirmagan</option>
+                        <option value="2">Topshirdi</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <input type="hidden" name="uslub" value="topshirish">
+                            <input type="hidden" name="kitob_olgan_id" value="{{kitob_olgan.id}}" >
+                            <button type="submit" class="btn btn-primary">Saqlash</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}
+<!-- Modal start -->
+<div class="modal fade" id="KitobBerishModal" tabindex="-1" role="dialog" aria-labelledby="KitobBerishModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="{% url 'kitob_olganlar' %}" method="POST">
+                {% csrf_token %}
+            <div class="modal-header">
+                <h5 class="modal-title" id="KitobBerishModalLabel">Kitob berish</h5>
+            </div>
+            <div class="modal-body">
+                <div class="col-12 py-2 text-center">
+                    <select onchange="guruhtalaba()" name="guruh" id="guruh" style="width: 300px; border-radius: 10px; padding: 8px; border: 1px solid black; outline: none;"  required>
+                        <option value="" disabled selected>--Guruh--</option>
+                        {% for guruh in guruhlar %}
+                        <option  value="{{ guruh.id }}">{{ guruh.nomi }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-12 py-2 text-center">
+                    <select name="talaba_id" id="talaba" style="width: 300px; border-radius: 10px; padding: 8px; border: 1px solid black; outline: none;"  required>
+                        <option value="" disabled selected>--Talaba--</option>
+                    </select>
+                </div>
+                <div class="col-12 py-2 text-center">
+                    <input name="kitob" style="width: 300px; border-radius: 10px; padding: 8px; border: 1px solid black; outline: none;" type="text" placeholder="Kitob nomi" required>
+                </div>
+                <div class="col-12 py-2 text-center">
+                    <label for="qaytaradi">Qachon qaytaradi</label><br>
+                    <input name="qaytaradi" id="qaytaradi" style="width: 300px; border-radius: 10px; padding: 8px; border: 1px solid black; outline: none;" type="date" required>
+                </div>
+                        
+               
+            </div>
+            <div class="modal-footer">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-primary">Saqlash</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</div>
+<!-- Modal end -->
+
+{% endblock content %}
+{% block js %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="{% static 'guruh-talabalari.js' %}"></script>
+<!-- Page level plugins -->
+<script src="{% static 'yangi/vendor/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'yangi/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+
+<!-- Page level custom scripts -->
+<script src="{% static 'yangi/js/demo/datatables-demo.js' %}"></script>
+{% endblock js %}

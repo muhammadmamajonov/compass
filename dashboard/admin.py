@@ -64,11 +64,17 @@ class KutayotganlarAdmin(admin.ModelAdmin):
 class DavomatAdmin(admin.ModelAdmin):
     list_display = ('id', 'sana', 'talaba', 'guruh', 'keldi')
 
+@admin.register(KitobOlganlar)
+class KitobOlganlarAdmin(admin.ModelAdmin):
+    list_display = ('id', 'talaba', 'kitob', 'olgan_sana', 'qaytaradi')
+    list_display_links = ('id', 'talaba', 'kitob', 'olgan_sana', 'qaytaradi')
 
 @admin.register(Promotor)
 class PromotorAdmin(admin.ModelAdmin):
     list_display = ('id', 'talaba')
+
 admin.site.register(Oy)
 admin.site.register(TestNatijalari)
 admin.site.unregister(Group)
 # admin.site.unregister(User)
+admin.site.register(Kitob)

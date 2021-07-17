@@ -210,4 +210,19 @@ class Bonus(models.Model):
     sana = models.DateField(auto_now_add=True)
     
 
-    
+class Kitob(models.Model):
+    nomi = models.CharField(max_length=50)
+
+    def __str__(self) -> str:
+        return self.nomi
+
+
+class KitobOlganlar(models.Model):
+    talaba = models.ForeignKey(Talaba, on_delete=models.CASCADE)
+    kitob = models.CharField(max_length=50)
+    olgan_sana = models.DateField(auto_now_add=True)
+    qaytaradi = models.DateField()
+    holat = models.IntegerField(choices=((1, "Topshirmagan"), (2, "Topshirgan")), default=1)
+
+    def __str__(self) -> str:
+        return self.talaba.ism_familya

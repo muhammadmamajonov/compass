@@ -39,5 +39,6 @@ urlpatterns = [
     path('lead_toifa/', views.lead_toifa, name = 'lead_toifa'),
     path('guruh-tolamagan/', views.guruh, name = 'guruh-tolamagan'),
     path('talaba-sharoit-qosh/', views.talaba_sharoit_qosh, name = 'talaba_sharoit_qosh'),
+    path('kitob-olganlar/', views.Kitob_olganlar, name='kitob_olganlar')
 
 ]
