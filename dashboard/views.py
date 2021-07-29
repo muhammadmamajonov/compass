@@ -69,12 +69,11 @@ def guruh_tolamaganlar(request):
                         'id': talaba.talaba.id
                     }
                     dt.append(data)
-                    print("data", data, "dt", dt)
-                    print("tolaganlar id:", tolaganlar_id)
+                   
         else:
             print(guruh_talabalari)
             for gt in guruh_talabalari:
-                print(gt)
+
                 data = {
                     'id': gt.talaba.id,
                     'ism_familya': gt.talaba.ism_familya
@@ -610,8 +609,6 @@ def TolovKiritish(request):
         oylar = Oy.objects.all()
 
 
-
-        print(i, "iiiiiiiiiiiiiii")
         return render(request, 'tolov_qilish.html',
                       {'i': i, 'tolomaganlar': tolamaganlar, 'talabalar': talabalar, 'tolovlar': tolovlar,
                        'guruhlar': guruhlar, 'oylar': oylar, 'chala_tolovqigan':chala_tolovqigan, 'tolov_active':"active"})
@@ -733,12 +730,12 @@ def Guruhlar(request):
 def guruhga_qosh(request):
     if request.method == 'POST':
         gr_id = request.POST['gr_id']
-        talaba_id = request.POST.getlist['talaba']
+        talaba_idlar = request.POST.getlist['talaba']
         for talaba_id in talaba_idlar:
             azo = Azolik.objects.create(talaba_id=talaba_id, guruh_id=gr_id)
             azo.save()
             messages.info(request, "Talaba: {}".format(azo.talaba.ism_familya))
-        messages.info(request, 'Guruh nomi:{}'.format(gr_nomi))
+        messages.info(request, 'Guruh nomi:{}'.format(Guruh.objects.get(id=gr_id).nomi))
 
 #################### Guruhga talaba qo'shish ############################################
 
@@ -909,11 +906,8 @@ def GuruhDView(request):
     user = get_user(request)
     if request.method == 'POST':
        gur_id = request.POST['guruh_id']
-       print(guruh, gur_id)
        guruh = Guruh.objects.get(id=gur_id)
-       print(guruh.azolik_set.all())
        data = []
-       print(guruh.id)
        for talaba in guruh.azolik_set.all():
            t ={
                'id' : talaba.talaba.id,

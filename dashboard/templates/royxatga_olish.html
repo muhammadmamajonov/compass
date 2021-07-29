@@ -1,6 +1,7 @@
 {% extends 'manba.html' %} {% load static %} {% block css %}
 <link rel="stylesheet" href="{% static 'yangi/css/style.css' %}">
-<link rel="stylesheet" href="{% static 'yangi/css/bootstrap-select.css' %}"> {% endblock css %} {% block content %}
+<!-- <link rel="stylesheet" href="{% static 'yangi/css/bootstrap-select.css' %}">  -->
+{% endblock css %} {% block content %}
 <style>
     .reg {
         margin-top: 48px;
@@ -124,7 +125,8 @@
 </div>
 
 
-{% endblock content %} {% block js %} {% if messages %}
+{% endblock content %} {% block js %} 
+{% if messages %}
 <script>
     $(document).ready(function() {
         $('#exampleModal').modal({
@@ -133,6 +135,5 @@
     });
 </script>
 {% endif %}
-<script src="{% static 'yangi/js/bootstrap-select.js' %}"></script>
-<script src="{% static 'yangi/js/bootstrap-select.min.js' %}"></script>
+
 {% endblock js %}
